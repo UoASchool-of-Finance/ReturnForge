@@ -4,7 +4,8 @@
 <!-- badges: start -->
 <!-- badges: end -->
 
-The goal of ReturnForge is to streamline return data generation and exploratory data anyalsis workflow
+The goal of ReturnForge is to streamline return data generation and exploratory data analysis workflow generally seen throughout finance courses 
+provided by the [University of Alberta](https://www.ualberta.ca/en/finance-department/index.html)
 
 ## Installation
 
@@ -17,10 +18,13 @@ pak::pak("UoASchool-of-Finance/ReturnForge")
 
 ## Example
 
-This is a basic example which shows you how to solve a common problem:
+This is a basic example which shows you how to generate a tibble object using yahoo finance tickers:
 
 ``` r
 library(ReturnForge)
-## basic example code
+
+tickers = c('CCOM.TO', '^SPGSCI')
+
+long_tibble = genrets(tickers, '2020-01-01', ret_type = 'rel')
 ```
 
