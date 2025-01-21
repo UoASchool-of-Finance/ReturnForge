@@ -18,4 +18,5 @@ Imports:
     tidyquant,
     zoo,
     stats,
-    magrittr
+    magrittr,
+    lubridate
