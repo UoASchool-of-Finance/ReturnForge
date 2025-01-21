@@ -5,7 +5,7 @@
 # usethis::use_package('zoo')
 # usethis::use_package('stats')
 # usethis::use_pipe()
-
+# usethis::use_package('lubridate')
 library(tidyverse)
 
 stocks <- tidyquant::tq_get(

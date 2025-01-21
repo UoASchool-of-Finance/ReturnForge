@@ -25,6 +25,6 @@ library(ReturnForge)
 
 tickers = c('CCOM.TO', '^SPGSCI')
 
-long_tibble = genrets(tickers, '2020-01-01', ret_type = 'rel')
+long_tibble = genrets(tickers, '2020-01-01', 'monthly', ret_type = 'rel')
 ```
 
