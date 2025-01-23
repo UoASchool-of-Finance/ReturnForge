@@ -5,6 +5,7 @@
 #'
 #' @param tickers A list of yahoo finance tickers. `list`
 #' @param start_date the first observation date. `character`
+#' @param freq daily (default), 'monthly'. `character`
 #' @param ret_type log (default), 'rel', or 'abs'. `character`
 #' @param output 'tibble' (default), 'zoo'. `character`
 #' @param long TRUE (default) to return a long tibble FALSE for wide. Zoo objects are wide. `character`
@@ -13,47 +14,44 @@
 #' @author Mitch Greer
 #' @examples
 #' tickers = c('SPY', 'QQQ')
-#' rets_long <- genrets(tickers, '2020-01-01', ret_type = 'log', output = 'tibble', long = TRUE)
+#' rets_long <- genrets(tickers, '2020-01-01', freq = 'daily', ret_type = 'log', output = 'tibble', long = TRUE)
 #'
 
-genrets <- function(tickers, start_date, ret_type = 'log', output = 'tibble', long = TRUE){
+genrets <- function(tickers, start_date, freq = 'daily', ret_type = 'log', output = 'tibble', long = TRUE){
 
-  prices <- tidyquant::tq_get(
-    x = tickers,
-    get = 'stock.prices',
-    from = as.Date(start_date) - 1
-  ) %>%
-    dplyr::select(date, symbol, adjusted) %>%
-    dplyr::group_by(symbol)
+  if(freq == 'daily'){
 
-  if(ret_type == 'log'){
+    prices <- tidyquant::tq_get(
+      x = tickers,
+      get = 'stock.prices',
+      from = as.Date(start_date) - 1
+    ) %>%
+      dplyr::select(date, symbol, adjusted) %>%
+      dplyr::group_by(symbol)
 
-    rets <- prices %>%
-      dplyr::mutate(
-        return = log(adjusted / dplyr::lag(adjusted))
-      ) %>%
-      tidyr::drop_na()%>%
-      dplyr::select(-adjusted)
+  }else if(freq == 'monthly'){
 
-  }else if(ret_type == 'rel'){
-
-    rets <- prices %>%
-      dplyr::mutate(
-        return = (adjusted / dplyr::lag(adjusted)) - 1
-      ) %>%
-      tidyr::drop_na() %>%
-      dplyr::select(-adjusted)
-
-  }else if(ret_type == 'abs'){
-
-    rets <- prices %>%
-      dplyr::mutate(
-        return = adjusted - dplyr::lag(adjusted)
-      ) %>%
-      tidyr::drop_na() %>%
-      dplyr::select(-adjusted)
-
+    prices <- tidyquant::tq_get(
+      x = tickers,
+      get = 'stock.prices',
+      from = as.Date(start_date) - 1
+    ) %>%
+      dplyr::mutate(ME = lubridate::ceiling_date(date, unit = 'months') - 1,
+                    month = lubridate::month(date)) %>%
+      dplyr::group_by(symbol) %>%
+      dplyr::filter(month != lead(month)) %>%
+      dplyr::mutate(date = ME) %>%
+      dplyr::select(date, adjusted)
   }
+
+  rets <- prices %>%
+    dplyr::mutate(return = dplyr::case_when(
+      ret_type == 'log' ~ log(adjusted / dplyr::lag(adjusted)),
+      ret_type == 'rel' ~ (adjusted / dplyr::lag(adjusted)) - 1,
+      ret_type == 'abs' ~ adjusted - dplyr::lag(adjusted)
+    )) %>%
+    tidyr::drop_na() %>%
+    dplyr::select(-adjusted)
 
   if(output == 'tibble'){
 

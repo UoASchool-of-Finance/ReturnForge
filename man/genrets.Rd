@@ -4,12 +4,21 @@
 \alias{genrets}
 \title{Create a tibble or zoo object of returns using tq_get}
 \usage{
-genrets(tickers, start_date, ret_type = "log", output = "tibble", long = TRUE)
+genrets(
+  tickers,
+  start_date,
+  freq = "daily",
+  ret_type = "log",
+  output = "tibble",
+  long = TRUE
+)
 }
 \arguments{
 \item{tickers}{A list of yahoo finance tickers. \code{list}}
 
 \item{start_date}{the first observation date. \code{character}}
+
+\item{freq}{daily (default), 'monthly'. \code{character}}
 
 \item{ret_type}{log (default), 'rel', or 'abs'. \code{character}}
 
@@ -26,7 +35,7 @@ using the tidyquant, tidy, and zoo libraries.
 }
 \examples{
 tickers = c('SPY', 'QQQ')
-rets_long <- genrets(tickers, '2020-01-01', ret_type = 'log', output = 'tibble', long = TRUE)
+rets_long <- genrets(tickers, '2020-01-01', freq = 'daily', ret_type = 'log', output = 'tibble', long = TRUE)
 
 }
 \author{
