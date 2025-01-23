@@ -34,7 +34,7 @@ genrets <- function(tickers, start_date, freq = 'daily', ret_type = 'log', outpu
     prices <- tidyquant::tq_get(
       x = tickers,
       get = 'stock.prices',
-      from = as.Date(start_date) - 1
+      from = as.Date(start_date) - lubridate::dmonths(1)
     ) %>%
       dplyr::mutate(ME = lubridate::ceiling_date(date, unit = 'months') - 1,
                     month = lubridate::month(date)) %>%
