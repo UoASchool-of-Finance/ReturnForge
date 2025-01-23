@@ -39,7 +39,7 @@ genrets <- function(tickers, start_date, freq = 'daily', ret_type = 'log', outpu
       dplyr::mutate(ME = lubridate::ceiling_date(date, unit = 'months') - 1,
                     month = lubridate::month(date)) %>%
       dplyr::group_by(symbol) %>%
-      dplyr::filter(month != lead(month)) %>%
+      dplyr::filter(month != dplyr::lead(month)) %>%
       dplyr::mutate(date = ME) %>%
       dplyr::select(date, adjusted)
   }
@@ -68,7 +68,7 @@ genrets <- function(tickers, start_date, freq = 'daily', ret_type = 'log', outpu
       return(tmp)
     }
 
-  }else if(output == zoo){
+  }else if(output == 'zoo'){
 
     tmp <- rets %>%
       tidyr::pivot_wider(id_cols = date, names_from = symbol, values_from = return)
