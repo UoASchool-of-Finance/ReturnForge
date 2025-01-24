@@ -2,4 +2,9 @@
 
 export("%>%")
 export(genrets)
+export(retprofile)
+import(dplyr)
+import(plotly)
+import(slider)
+import(tidyr)
 importFrom(magrittr,"%>%")

@@ -19,4 +19,6 @@ Imports:
     zoo,
     stats,
     magrittr,
-    lubridate
+    lubridate,
+    slider,
+    plotly
