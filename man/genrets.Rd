@@ -35,7 +35,7 @@ using the tidyquant, tidy, and zoo libraries.
 }
 \examples{
 tickers = c('SPY', 'QQQ')
-rets_long <- genrets(tickers, '2020-01-01', freq = 'daily', ret_type = 'log', output = 'tibble', long = TRUE)
+rets_long <- genrets(tickers, '2020-01-01')
 
 }
 \author{
